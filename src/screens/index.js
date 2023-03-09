@@ -1,18 +1,18 @@
 import "../App.css";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
-import { MdPerson, MdCurrencyBitcoin } from "react-icons/md";
+import { MdPerson } from "react-icons/md";
 import { FaDollarSign } from "react-icons/fa";
 
 const TipCalculator = () => {
-  const [width, setWidth] = useState(50);
-  const [person, setPerson] = useState(0);
+  const [tip, setTip] = useState(50);
+  const [person, setPerson] = useState(1);
   const [bill, setBill] = useState(0);
   const [tipAmount, setTipAmount] = useState(0);
   const [total, setTotal] = useState(0);
 
-  const changeWidth = (event) => {
-    setWidth(event.target.value);
+  const changeTip = (event) => {
+    setTip(event.target.value);
   };
 
   const changePerson = (event) => {
@@ -24,11 +24,18 @@ const TipCalculator = () => {
   };
 
   const reset = () => {
-    setWidth(50);
+    setTip(50);
     setTipAmount(0);
     setTotal(0);
-    setPerson(0);
+    setPerson(1);
   };
+
+  useEffect(() => {
+    const calculatedTip = (bill * tip) / 100 / person;
+    setTipAmount(parseFloat(calculatedTip).toFixed(2));
+    const calculatedTotal = (bill * (tip / 100 + 1)) / person;
+    setTotal(parseFloat(calculatedTotal).toFixed(2));
+  });
 
   return (
     <div className="App">
@@ -67,7 +74,7 @@ const TipCalculator = () => {
               </div>
 
               <div className="sect">
-                <h4 className="text">Tip %{width}</h4>
+                <h4 className="text">Tip %{tip}</h4>
                 <input
                   className="input"
                   type="range"
@@ -75,29 +82,29 @@ const TipCalculator = () => {
                   max={50}
                   step={5}
                   placeholder="$"
-                  onChange={changeWidth}
-                  value={width}
+                  onChange={changeTip}
+                  value={tip}
                 />
                 <input
                   type="number"
                   placeholder="Custom"
                   className="custom"
-                  onChange={changeWidth}
-                  value={width}
+                  onChange={changeTip}
+                  value={tip}
                 />
               </div>
               <div className="sect">
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <h4 className="text">Tip Amount /person</h4>
                   <div className="icon">
-                    <FaDollarSign color={"black"} size={50} />
+                    <FaDollarSign color={"black"} size={30} />
                     <h2 className="text">{tipAmount}</h2>
                   </div>
                 </div>
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <h4 className="text">Total /person</h4>
                   <div className="icon">
-                    <FaDollarSign color={"black"} size={50} />
+                    <FaDollarSign color={"black"} size={30} />
                     <h2 className="text">{total}</h2>
                   </div>
                 </div>
